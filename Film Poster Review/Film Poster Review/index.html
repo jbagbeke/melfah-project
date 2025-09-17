@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghanaian Film Poster Reviews</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Stars -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+
+        /* ----- Hero Slideshow CSS Hack ----- */
+        .slideshow-container {
+            overflow: hidden;
+            position: relative;
+            max-width: 100vw;
+            height: 60vh;
+        }
+
+        .slideshow-wrapper {
+            display: flex;
+            transition: transform 0.6s ease-in-out;
+            height: 100%;
+        }
+
+        .slideshow-slide {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        /* Hide radio buttons */
+        .slideshow-controls input {
+            display: none;
+        }
+
+        
+        
+        /* ----- Review Modal CSS Hack ----- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .modal-overlay:target {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: #9ca3af;
+            font-size: 1.5rem;
+            text-decoration: none;
+        }
+
+        /* ----- Star Rating CSS Hack ----- */
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: center;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            font-size: 2rem;
+            color: #d1d5db;
+            padding: 0 0.25rem;
+            cursor: pointer;
+            transition: color 0.2s ease-in-out;
+        }
+
+        .star-rating input:checked ~ label {
+            color: #facc15;
+        }
+          .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #facc15;
+        }        /* Review Display Styles */
+        .review-item {
+            margin-bottom: 1rem;
+        }
+
+        .review-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f4f6;
+            border-radius: 50%;
+            border-top-color: #3498db;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .success-message {
+            background-color: #10b981;
+            color: white;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .error-message {
+            background-color: #ef4444;
+            color: white;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="bg-gray-800 text-white shadow-lg sticky top-0 z-40">
+        <div class="container mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center">
+            <h1 class="text-2xl font-bold">PostRate</h1>
+            <nav class="mt-4 sm:mt-0">
+                <ul class="flex space-x-6">
+                    <li><a href="#hero" class="hover:text-pink-400 transition-colors">Home</a></li>
+                    <li><a href="#about" class="hover:text-pink-400 transition-colors">About</a></li>
+                    <li><a href="#films" class="hover:text-pink-400 transition-colors">Films</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section with Slideshow -->
+    <section >
+        <div class="slideshow-container">
+            <div class="slideshow-controls">
+                <input type="radio" name="slideshow" id="slide1" checked>
+                <input type="radio" name="slideshow" id="slide2">
+                <input type="radio" name="slideshow" id="slide3">
+            </div>
+            <div class="slideshow-wrapper">
+                <div class="slideshow-slide" style="background-color: #4f46e5;">
+                    <div class="text-center p-8 rounded-lg bg-gray-900 bg-opacity-100 text-white max-w-lg">
+                        <h2 class="text-4xl sm:text-5xl font-extrabold mb-4">Discover More. Rate More.</h2>
+                        <p class="text-lg sm:text-xl font-light">Explore a curated collection of film posters and share your thoughts.</p>
+                        <a href="#films" class="mt-6 inline-block bg-pink-400 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-pink-500 transition-colors">View Films</a>
+                    </div>
+                </div>
+                <div class="slideshow-slide" style="background-image: url('https://placehold.co/1920x1080/4ade80/ffffff?text=Artistic+Posters+from+Ghana')">
+                    <div class="text-center p-8 rounded-lg bg-gray-900 bg-opacity-100 text-white max-w-lg">
+                        <h2 class="text-4xl sm:text-5xl font-extrabold mb-4">Posters that Tell Stories</h2>
+                        <p class="text-lg sm:text-xl font-light">From classic visuals to modern masterpieces, we have it all.</p>
+                        <a href="#films" class="mt-6 inline-block bg-pink-400 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-pink-500 transition-colors">View Films</a>
+                    </div>
+                </div>
+                <div class="slideshow-slide" style="background-image: url('https://placehold.co/1920x1080/fb7185/ffffff?text=Your+Reviews+Matter')">
+                    <div class="text-center p-8 rounded-lg bg-gray-900 bg-opacity-70 text-white max-w-lg">
+                        <h2 class="text-4xl sm:text-5xl font-extrabold mb-4">Your Voice, Your Rating</h2>
+                        <p class="text-lg sm:text-xl font-light">Rate and review posters to help others discover great art.</p>
+                        <a href="#films" class="mt-6 inline-block bg-pink-400 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-pink-500 transition-colors">View Films</a>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-dots">
+                <label for="slide1"></label>
+                <label for="slide2"></label>
+                <label for="slide3"></label>
+            </div>
+        </div>
+    </section>
+    <!-- End Hero Section -->
+
+    <!-- Main Content Area -->
+    <main class="container mx-auto px-4 py-12">
+        
+        <!-- About Section -->
+        <section id="about" class="mb-16">
+            <h2 class="text-4xl font-extrabold text-center text-gray-800 mb-6">About Our Mission</h2>
+            <div class="max-w-3xl mx-auto text-center text-lg text-gray-600 leading-relaxed">
+                <p>Welcome to PostRate, your ultimate destination for celebrating rich artistry of Ghanaian film posters. We believe that a film's poster is more than just an advertisement—it's a work of art in itself. Our platform provides a space for film enthusiasts and fans to explore, review, and rate these cinematic creations. By focusing on the visual design and communication. Join our community and help us build the definitive hub for Ghanaian film posters.</p>
+            </div>
+        </section>
+
+        <!-- Film Posters Grid -->
+        <section id="films">
+            <h2 class="text-4xl font-extrabold text-center text-gray-800 mb-10">Featured Posters</h2>            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                  <!-- Poster Card 1 -->
+                <div id="poster-card-1" class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-2" data-poster-id="captain-ibrahim-traore" data-poster-name="Captain Ibrahim Traore">
+                    <a href="#review-poster-1" class="block relative group">
+                        <img src="ibrahim.jpg" alt="ibrahim'" class="rounded-t-xl w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-4 rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                            <h3 class="text-xl font-bold text-white mb-1">Captain Ibrahim Traore</h3>
+                            <div class="flex items-center text-yellow-400 text-sm rating-display">
+                                <i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+                                <span class="ml-2 text-white rating-text">0.0 / 5 (0 reviews)</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Poster Card 2 -->
+                <div id="poster-card-2" class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-2" data-poster-id="aloevera" data-poster-name="Aloevera">
+                    <a href="#review-poster-2" class="block relative group">
+                        <img src="aloevera.jpg" alt="aloevera'" class="rounded-t-xl w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-4 rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                            <h3 class="text-xl font-bold text-white mb-1">Aloevera</h3>
+                            <div class="flex items-center text-yellow-400 text-sm rating-display">
+                                <i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+                                <span class="ml-2 text-white rating-text">0.0 / 5 (0 reviews)</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Poster Card 3 -->
+                <div id="poster-card-3" class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-2" data-poster-id="shadows" data-poster-name="Shadows">
+                    <a href="#review-poster-3" class="block relative group">
+                        <img src="Shadows.jpg" alt="Shadows'" class="rounded-t-xl w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-4 rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                            <h3 class="text-xl font-bold text-white mb-1">Shadows</h3>
+                            <div class="flex items-center text-yellow-400 text-sm rating-display">
+                                <i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+                                <span class="ml-2 text-white rating-text">0.0 / 5 (0 reviews)</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Poster Card 4 -->
+                <div id="poster-card-4" class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-2" data-poster-id="eyes-on-the-prize" data-poster-name="Eyes on the prize">
+                    <a href="#review-poster-4" class="block relative group">
+                        <img src="Eyes on the prize.jpg" alt="Eyes on the prize'" class="rounded-t-xl w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-4 rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                            <h3 class="text-xl font-bold text-white mb-1">Eyes on the prize</h3>
+                            <div class="flex items-center text-yellow-400 text-sm rating-display">
+                                <i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+                                <span class="ml-2 text-white rating-text">0.0 / 5 (0 reviews)</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Poster Card 5 - Black Panther -->
+                <div id="poster-card-5" class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-2" data-poster-id="black-panther" data-poster-name="Black Panther">
+                    <a href="#review-poster-5" class="block relative group">
+                        <img src="https://image.tmdb.org/t/p/w500/uxzzxijgPIY7slzFvMotPv8wjKA.jpg" alt="Black Panther" class="rounded-t-xl w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-4 rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                            <h3 class="text-xl font-bold text-white mb-1">Black Panther</h3>
+                            <div class="flex items-center text-yellow-400 text-sm rating-display">
+                                <i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+                                <span class="ml-2 text-white rating-text">0.0 / 5 (0 reviews)</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Poster Card 6 - Parasite -->
+                <div id="poster-card-6" class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-2" data-poster-id="parasite" data-poster-name="Parasite">
+                    <a href="#review-poster-6" class="block relative group">
+                        <img src="https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg" alt="Parasite" class="rounded-t-xl w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-4 rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                            <h3 class="text-xl font-bold text-white mb-1">Parasite</h3>
+                            <div class="flex items-center text-yellow-400 text-sm rating-display">
+                                <i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+                                <span class="ml-2 text-white rating-text">0.0 / 5 (0 reviews)</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Poster Card 7 - Dune -->
+                <div id="poster-card-7" class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-2" data-poster-id="dune" data-poster-name="Dune">
+                    <a href="#review-poster-7" class="block relative group">
+                        <img src="https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg" alt="Dune" class="rounded-t-xl w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-4 rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                            <h3 class="text-xl font-bold text-white mb-1">Dune</h3>
+                            <div class="flex items-center text-yellow-400 text-sm rating-display">
+                                <i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+                                <span class="ml-2 text-white rating-text">0.0 / 5 (0 reviews)</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Poster Card 8 - Spider-Man: No Way Home -->
+                <div id="poster-card-8" class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-2" data-poster-id="spider-man-no-way-home" data-poster-name="Spider-Man: No Way Home">
+                    <a href="#review-poster-8" class="block relative group">
+                        <img src="https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg" alt="Spider-Man: No Way Home" class="rounded-t-xl w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-4 rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                            <h3 class="text-xl font-bold text-white mb-1">Spider-Man: No Way Home</h3>
+                            <div class="flex items-center text-yellow-400 text-sm rating-display">
+                                <i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+                                <span class="ml-2 text-white rating-text">0.0 / 5 (0 reviews)</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- About Section 2 -->
+        <section class="mt-16">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">Our Creative Vision</h2>
+            <div class="flex flex-col lg:flex-row items-center gap-10">
+                <div class="lg:w-1/2">
+                    <img src="Lounge.jpeg" alt="Lounge" width="600" class="rounded-xl shadow-xl">
+                </div>
+                <div class="lg:w-1/2 text-lg text-gray-600 leading-relaxed">
+                    <p class="mb-4">Film posters are a powerful art form that encapsulates the essence of a movie in a single frame. In Ghana, this art has a rich history, with hand-painted posters being a celebrated tradition.  Our goal is to honor this legacy while also showcasing the evolution of modern poster design. We invite you to be a part of this journey by sharing your perspective on each poster's visual impact, creativity, and connection to the film it represents.</p>
+                    <p>Each review you submit helps build a comprehensive archive of public opinion, providing valuable insights for creators and fellow fans alike. Let's celebrate the beauty and innovation of Ghanaian film together.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    <!-- End Main Content -->
+
+    <!-- Review Modals -->    <!-- Modal for Poster 1 -->
+    <div id="review-poster-1" class="modal-overlay">
+        <div class="modal-content text-center w-full max-w-2xl mx-4">
+            <a href="#films" class="modal-close">&times;</a>
+            <h3 class="text-2xl font-bold mb-4">Review: Captain Ibrahim Traore</h3>
+            <div class="flex flex-col items-center gap-6">
+                <img src="ibrahim.jpg" alt="ibrahim'" class="rounded-lg w-full max-w-sm">
+                <div class="w-full">                    <p class="mb-4 text-gray-600">Share your thoughts and rating for the poster of 'Captain Ibrahim Traore'.</p>
+                    <form class="space-y-4">
+                        <div class="star-rating">
+                            <input type="radio" id="poster1-star5" name="rating" value="5" /><label for="poster1-star5" title="5 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster1-star4" name="rating" value="4" /><label for="poster1-star4" title="4 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster1-star3" name="rating" value="3" /><label for="poster1-star3" title="3 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster1-star2" name="rating" value="2" /><label for="poster1-star2" title="2 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster1-star1" name="rating" value="1" /><label for="poster1-star1" title="1 star"><i class="fas fa-star"></i></label>
+                        </div>
+                        <input type="hidden" name="poster" value="Captain Ibrahim Traore">
+                        <input type="hidden" name="poster_id" value="captain-ibrahim-traore">
+                        <div>
+                            <label for="name1" class="sr-only">Your Name</label>
+                            <input type="text" id="name1" name="name" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
+                        </div>
+                        <div>
+                            <label for="review1" class="sr-only">Your Review</label>
+                            <textarea id="review1" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-pink-400 text-white font-bold py-3 rounded-full hover:bg-pink-500 transition-colors">Submit Review</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>    <!-- Modal for Poster 2 -->
+    <div id="review-poster-2" class="modal-overlay">
+        <div class="modal-content text-center w-full max-w-2xl mx-4">
+            <a href="#films" class="modal-close">&times;</a>
+            <h3 class="text-2xl font-bold mb-4">Review: Aloevera</h3>
+            <div class="flex flex-col items-center gap-6">
+                <img src="aloevera.jpg" alt="aloevera'" class="rounded-lg w-full max-w-sm">
+                <div class="w-full">                    <p class="mb-4 text-gray-600">Share your thoughts and rating for the poster of 'Aloevera'.</p>
+                    <form class="space-y-4">
+                        <div class="star-rating">
+                            <input type="radio" id="poster2-star5" name="rating" value="5" /><label for="poster2-star5" title="5 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster2-star4" name="rating" value="4" /><label for="poster2-star4" title="4 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster2-star3" name="rating" value="3" /><label for="poster2-star3" title="3 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster2-star2" name="rating" value="2" /><label for="poster2-star2" title="2 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster2-star1" name="rating" value="1" /><label for="poster2-star1" title="1 star"><i class="fas fa-star"></i></label>
+                        </div>
+                        <input type="hidden" name="poster" value="Aloevera">
+                        <input type="hidden" name="poster_id" value="aloevera">
+                        <div>
+                            <label for="name2" class="sr-only">Your Name</label>
+                            <input type="text" id="name2" name="name" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
+                        </div>
+                        <div>
+                            <label for="review2" class="sr-only">Your Review</label>
+                            <textarea id="review2" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-pink-400 text-white font-bold py-3 rounded-full hover:bg-pink-500 transition-colors">Submit Review</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+      <!-- Modal for Poster 3 -->
+    <div id="review-poster-3" class="modal-overlay">
+        <div class="modal-content text-center w-full max-w-2xl mx-4">
+            <a href="#films" class="modal-close">&times;</a>
+            <h3 class="text-2xl font-bold mb-4">Review: Shadows</h3>
+            <div class="flex flex-col items-center gap-6">
+                <img src="Shadows.jpg" alt="Shadows'" class="rounded-lg w-full max-w-sm">
+                <div class="w-full">                    <p class="mb-4 text-gray-600">Share your thoughts and rating for the poster of 'Shadows'.</p>
+                    <form class="space-y-4">
+                        <div class="star-rating">
+                            <input type="radio" id="poster3-star5" name="rating" value="5" /><label for="poster3-star5" title="5 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster3-star4" name="rating" value="4" /><label for="poster3-star4" title="4 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster3-star3" name="rating" value="3" /><label for="poster3-star3" title="3 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster3-star2" name="rating" value="2" /><label for="poster3-star2" title="2 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster3-star1" name="rating" value="1" /><label for="poster3-star1" title="1 star"><i class="fas fa-star"></i></label>
+                        </div>
+                        <input type="hidden" name="poster" value="Shadows">
+                        <input type="hidden" name="poster_id" value="shadows">
+                        <div>
+                            <label for="name3" class="sr-only">Your Name</label>
+                            <input type="text" id="name3" name="name" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
+                        </div>
+                        <div>
+                            <label for="review3" class="sr-only">Your Review</label>
+                            <textarea id="review3" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-pink-400 text-white font-bold py-3 rounded-full hover:bg-pink-500 transition-colors">Submit Review</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+      <!-- Modal for Poster 4 -->
+    <div id="review-poster-4" class="modal-overlay">
+        <div class="modal-content text-center w-full max-w-2xl mx-4">
+            <a href="#films" class="modal-close">&times;</a>
+            <h3 class="text-2xl font-bold mb-4">Review: Eyes on the prize</h3>
+            <div class="flex flex-col items-center gap-6">
+                <img src="Eyes on the prize.jpg" alt="Eyes on the prize'" class="rounded-lg w-full max-w-sm">
+                <div class="w-full">                    <p class="mb-4 text-gray-600">Share your thoughts and rating for the poster of 'Eyes on the prize'.</p>
+                    <form class="space-y-4">
+                        <div class="star-rating">
+                            <input type="radio" id="poster4-star5" name="rating" value="5" /><label for="poster4-star5" title="5 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster4-star4" name="rating" value="4" /><label for="poster4-star4" title="4 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster4-star3" name="rating" value="3" /><label for="poster4-star3" title="3 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster4-star2" name="rating" value="2" /><label for="poster4-star2" title="2 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster4-star1" name="rating" value="1" /><label for="poster4-star1" title="1 star"><i class="fas fa-star"></i></label>
+                        </div>
+                        <input type="hidden" name="poster" value="Eyes on the prize">
+                        <input type="hidden" name="poster_id" value="eyes-on-the-prize">
+                        <div>
+                            <label for="name4" class="sr-only">Your Name</label>
+                            <input type="text" id="name4" name="name" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
+                        </div>
+                        <div>
+                            <label for="review4" class="sr-only">Your Review</label>
+                            <textarea id="review4" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-pink-400 text-white font-bold py-3 rounded-full hover:bg-pink-500 transition-colors">Submit Review</button>
+                    </form>
+                </div>
+            </div>
+        </div>    </div>
+      
+    <!-- Modal for Poster 5 - Black Panther -->
+    <div id="review-poster-5" class="modal-overlay">
+        <div class="modal-content text-center w-full max-w-2xl mx-4">
+            <a href="#films" class="modal-close">&times;</a>
+            <h3 class="text-2xl font-bold mb-4">Review: Black Panther</h3>
+            <div class="flex flex-col items-center gap-6">
+                <img src="https://image.tmdb.org/t/p/w500/uxzzxijgPIY7slzFvMotPv8wjKA.jpg" alt="Black Panther" class="rounded-lg w-full max-w-sm">
+                <div class="w-full">                    <p class="mb-4 text-gray-600">Share your thoughts and rating for the poster of 'Black Panther'.</p>
+                    <form class="space-y-4">
+                        <div class="star-rating">
+                            <input type="radio" id="poster5-star5" name="rating" value="5" /><label for="poster5-star5" title="5 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster5-star4" name="rating" value="4" /><label for="poster5-star4" title="4 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster5-star3" name="rating" value="3" /><label for="poster5-star3" title="3 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster5-star2" name="rating" value="2" /><label for="poster5-star2" title="2 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster5-star1" name="rating" value="1" /><label for="poster5-star1" title="1 star"><i class="fas fa-star"></i></label>
+                        </div>
+                        <input type="hidden" name="poster" value="Black Panther">
+                        <input type="hidden" name="poster_id" value="black-panther">
+                        <div>
+                            <label for="name5" class="sr-only">Your Name</label>
+                            <input type="text" id="name5" name="name" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
+                        </div>
+                        <div>
+                            <label for="review5" class="sr-only">Your Review</label>
+                            <textarea id="review5" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-pink-400 text-white font-bold py-3 rounded-full hover:bg-pink-500 transition-colors">Submit Review</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Poster 6 - Parasite -->
+    <div id="review-poster-6" class="modal-overlay">
+        <div class="modal-content text-center w-full max-w-2xl mx-4">
+            <a href="#films" class="modal-close">&times;</a>
+            <h3 class="text-2xl font-bold mb-4">Review: Parasite</h3>
+            <div class="flex flex-col items-center gap-6">
+                <img src="https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg" alt="Parasite" class="rounded-lg w-full max-w-sm">
+                <div class="w-full">                    <p class="mb-4 text-gray-600">Share your thoughts and rating for the poster of 'Parasite'.</p>
+                    <form class="space-y-4">
+                        <div class="star-rating">
+                            <input type="radio" id="poster6-star5" name="rating" value="5" /><label for="poster6-star5" title="5 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster6-star4" name="rating" value="4" /><label for="poster6-star4" title="4 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster6-star3" name="rating" value="3" /><label for="poster6-star3" title="3 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster6-star2" name="rating" value="2" /><label for="poster6-star2" title="2 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster6-star1" name="rating" value="1" /><label for="poster6-star1" title="1 star"><i class="fas fa-star"></i></label>
+                        </div>
+                        <input type="hidden" name="poster" value="Parasite">
+                        <input type="hidden" name="poster_id" value="parasite">
+                        <div>
+                            <label for="name6" class="sr-only">Your Name</label>
+                            <input type="text" id="name6" name="name" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
+                        </div>
+                        <div>
+                            <label for="review6" class="sr-only">Your Review</label>
+                            <textarea id="review6" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-pink-400 text-white font-bold py-3 rounded-full hover:bg-pink-500 transition-colors">Submit Review</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Poster 7 - Dune -->
+    <div id="review-poster-7" class="modal-overlay">
+        <div class="modal-content text-center w-full max-w-2xl mx-4">
+            <a href="#films" class="modal-close">&times;</a>
+            <h3 class="text-2xl font-bold mb-4">Review: Dune</h3>
+            <div class="flex flex-col items-center gap-6">
+                <img src="https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg" alt="Dune" class="rounded-lg w-full max-w-sm">
+                <div class="w-full">                    <p class="mb-4 text-gray-600">Share your thoughts and rating for the poster of 'Dune'.</p>
+                    <form class="space-y-4">
+                        <div class="star-rating">
+                            <input type="radio" id="poster7-star5" name="rating" value="5" /><label for="poster7-star5" title="5 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster7-star4" name="rating" value="4" /><label for="poster7-star4" title="4 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster7-star3" name="rating" value="3" /><label for="poster7-star3" title="3 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster7-star2" name="rating" value="2" /><label for="poster7-star2" title="2 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster7-star1" name="rating" value="1" /><label for="poster7-star1" title="1 star"><i class="fas fa-star"></i></label>
+                        </div>
+                        <input type="hidden" name="poster" value="Dune">
+                        <input type="hidden" name="poster_id" value="dune">
+                        <div>
+                            <label for="name7" class="sr-only">Your Name</label>
+                            <input type="text" id="name7" name="name" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
+                        </div>
+                        <div>
+                            <label for="review7" class="sr-only">Your Review</label>
+                            <textarea id="review7" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-pink-400 text-white font-bold py-3 rounded-full hover:bg-pink-500 transition-colors">Submit Review</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Poster 8 - Spider-Man: No Way Home -->
+    <div id="review-poster-8" class="modal-overlay">
+        <div class="modal-content text-center w-full max-w-2xl mx-4">
+            <a href="#films" class="modal-close">&times;</a>
+            <h3 class="text-2xl font-bold mb-4">Review: Spider-Man: No Way Home</h3>
+            <div class="flex flex-col items-center gap-6">
+                <img src="https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg" alt="Spider-Man: No Way Home" class="rounded-lg w-full max-w-sm">
+                <div class="w-full">                    <p class="mb-4 text-gray-600">Share your thoughts and rating for the poster of 'Spider-Man: No Way Home'.</p>
+                    <form class="space-y-4">
+                        <div class="star-rating">
+                            <input type="radio" id="poster8-star5" name="rating" value="5" /><label for="poster8-star5" title="5 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster8-star4" name="rating" value="4" /><label for="poster8-star4" title="4 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster8-star3" name="rating" value="3" /><label for="poster8-star3" title="3 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster8-star2" name="rating" value="2" /><label for="poster8-star2" title="2 stars"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="poster8-star1" name="rating" value="1" /><label for="poster8-star1" title="1 star"><i class="fas fa-star"></i></label>
+                        </div>
+                        <input type="hidden" name="poster" value="Spider-Man: No Way Home">
+                        <input type="hidden" name="poster_id" value="spider-man-no-way-home">
+                        <div>
+                            <label for="name8" class="sr-only">Your Name</label>
+                            <input type="text" id="name8" name="name" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
+                        </div>
+                        <div>
+                            <label for="review8" class="sr-only">Your Review</label>
+                            <textarea id="review8" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-pink-400 text-white font-bold py-3 rounded-full hover:bg-pink-500 transition-colors">Submit Review</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+      <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2025 PostRate. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Google Sheets Integration Configuration
+        const GOOGLE_SHEETS_CONFIG = {
+            // Replace with your Google Apps Script Web App URL
+            submitUrl: 'https://script.google.com/macros/s/AKfycbwgH0MMJ69DMy8ER2bhOsfwVdlJe_CZi599JFGnqpSDgHaipU5c4gHHvXP4jNSbBKT3FQ/exec',
+            // Replace with your published Google Sheets Script URL for reading CSV
+            readUrl: 'https://script.google.com/macros/s/AKfycbzqGouvOctEQoJAxgc8kH8mzQfw_abw_Awqa0vPREyRCueLQwaoiCr2sMATxX1EGXbVvQ/exec'
+        };        // Review System Implementation
+        class ReviewSystem {
+            constructor() {
+                this.reviewsCache = {};
+                this.posterRatings = {};
+                this.initializeForms();
+                this.loadAllReviews();
+            }            initializeForms() {
+                // Find all review forms and attach event listeners
+                const forms = document.querySelectorAll('form');
+                forms.forEach(form => {
+                    form.addEventListener('submit', (e) => this.handleFormSubmit(e));
+                });
+            }
+
+            async handleFormSubmit(event) {
+                event.preventDefault();
+                
+                const form = event.target;
+                const formData = new FormData(form);
+                const submitButton = form.querySelector('button[type="submit"]');
+                const originalButtonText = submitButton.textContent;
+                
+                // Show loading state
+                submitButton.innerHTML = '<span class="loading"></span> Submitting...';
+                submitButton.disabled = true;
+
+                try {                    // Prepare data for Google Sheets
+                    const reviewData = {
+                        poster: formData.get('poster'),
+                        poster_id: formData.get('poster_id'),
+                        name: formData.get('name') || 'Anonymous',
+                        rating: parseInt(formData.get('rating')) || 0,
+                        review: formData.get('review'),
+                        timestamp: new Date().toISOString()
+                    };
+
+                    // Submit to Google Sheets
+                    await this.submitToGoogleSheets(reviewData);
+                    
+                    // Add review to local display immediately
+                    this.addReviewToDisplay(reviewData);
+                    
+                    // Show success message
+                    this.showMessage(form, 'Review submitted successfully!', 'success');
+                    
+                    // Reset form
+                    form.reset();
+                    
+                    // Reset star ratings
+                    const starInputs = form.querySelectorAll('.star-rating input');
+                    starInputs.forEach(input => input.checked = false);
+                    
+                } catch (error) {
+                    console.error('Error submitting review:', error);
+                    this.showMessage(form, 'Error submitting review. Please try again.', 'error');
+                } finally {
+                    // Reset button
+                    submitButton.textContent = originalButtonText;
+                    submitButton.disabled = false;
+                }
+            }
+
+            async submitToGoogleSheets(data) {
+                const response = await fetch(GOOGLE_SHEETS_CONFIG.submitUrl, {
+                    method: 'POST',
+                    mode: 'no-cors', // Required for Google Apps Script
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                // Note: no-cors mode means we can't read the response,
+                // but we assume success if no error is thrown
+                return true;
+            }            async loadAllReviews() {
+                try {
+                    // Load reviews from Google Sheets CSV
+                    const response = await fetch(GOOGLE_SHEETS_CONFIG.readUrl);
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const csvText = await response.text();
+
+                    const reviews = this.parseCSV(csvText);
+                    console.log('Parsed reviews:', reviews);
+                    
+                    // Group reviews by poster name and poster_id for easy lookup
+                    reviews.forEach(review => {
+                        // Store by poster name (primary key)
+                        const posterKey = review.poster;
+                        if (!this.reviewsCache[posterKey]) {
+                            this.reviewsCache[posterKey] = [];
+                        }
+                        this.reviewsCache[posterKey].push(review);
+                        
+                        // Also store by poster_id as secondary key
+                        if (review.poster_id && review.poster_id !== review.poster) {
+                            if (!this.reviewsCache[review.poster_id]) {
+                                this.reviewsCache[review.poster_id] = [];
+                            }
+                            this.reviewsCache[review.poster_id].push(review);
+                        }
+                    });
+                    
+                    console.log('Reviews cache:', this.reviewsCache);
+                    
+                    // Calculate average ratings for each poster
+                    this.calculatePosterRatings();
+                    
+                    // Update poster cards with calculated ratings
+                    this.updatePosterCards();
+                    
+                } catch (error) {
+                    console.error('Error loading reviews:', error);
+                    // Initialize with zero ratings if loading fails
+                    this.initializeZeroRatings();
+                }
+            }parseCSV(csvText) {
+                const lines = csvText.split('\n');
+                const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+                const reviews = [];
+                
+                for (let i = 1; i < lines.length; i++) {
+                    if (lines[i].trim()) {
+                        const values = this.parseCSVLine(lines[i]);
+                        if (values.length >= 5) {
+                            reviews.push({
+                                poster: values[0]?.replace(/"/g, '') || '',
+                                poster_id: values[1]?.replace(/"/g, '') || '',
+                                name: values[2]?.replace(/"/g, '') || 'Anonymous',
+                                rating: parseInt(values[3]) || 0,
+                                review: values[4]?.replace(/"/g, '') || '',
+                                timestamp: values[5]?.replace(/"/g, '') || ''
+                            });
+                        }
+                    }
+                }
+                
+                return reviews;
+            }
+
+            parseCSVLine(line) {
+                const result = [];
+                let current = '';
+                let inQuotes = false;
+                
+                for (let i = 0; i < line.length; i++) {
+                    const char = line[i];
+                    
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        result.push(current);
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                
+                result.push(current);
+                return result;
+            }
+
+            displayAllReviews() {
+                // Display reviews for each poster
+                Object.keys(this.reviewsCache).forEach(posterName => {
+                    this.displayReviewsForPoster(posterName);
+                });
+            }            displayReviewsForPoster(posterName) {
+                console.log('Displaying reviews for:', posterName);
+                const reviews = this.reviewsCache[posterName] || [];
+                console.log('Found reviews:', reviews);
+                
+                const modalId = this.getPosterModalId(posterName);
+                console.log('Modal ID:', modalId);
+                
+                const modal = document.getElementById(modalId);
+                
+                if (modal) {
+                    let reviewsContainer = modal.querySelector('.reviews-container');
+                    if (!reviewsContainer) {
+                        // Create reviews container if it doesn't exist
+                        const form = modal.querySelector('form');
+                        reviewsContainer = document.createElement('div');
+                        reviewsContainer.className = 'reviews-container mt-6 pt-6 border-t border-gray-200';
+                        reviewsContainer.innerHTML = '<h4 class="text-lg font-semibold mb-4 text-gray-800">Reviews</h4>';
+                        // Insert after the form
+                        if (form && form.parentNode) {
+                            form.parentNode.appendChild(reviewsContainer);
+                        }
+                    }
+                    
+                    // Clear existing reviews (except the title)
+                    const title = reviewsContainer.querySelector('h4');
+                    reviewsContainer.innerHTML = '';
+                    if (title) {
+                        reviewsContainer.appendChild(title);
+                    } else {
+                        reviewsContainer.innerHTML = '<h4 class="text-lg font-semibold mb-4 text-gray-800">Reviews</h4>';
+                    }
+                    
+                    if (reviews.length === 0) {
+                        const noReviewsMsg = document.createElement('p');
+                        noReviewsMsg.className = 'text-gray-500 italic';
+                        noReviewsMsg.textContent = 'No reviews yet. Be the first to review!';
+                        reviewsContainer.appendChild(noReviewsMsg);
+                    } else {
+                        reviews.forEach(review => {
+                            reviewsContainer.appendChild(this.createReviewElement(review));
+                        });
+                    }
+                } else {
+                    console.log('Modal not found for ID:', modalId);
+                }
+            }            addReviewToDisplay(reviewData) {
+                // Store review under poster name (primary key)
+                const posterKey = reviewData.poster;
+                if (!this.reviewsCache[posterKey]) {
+                    this.reviewsCache[posterKey] = [];
+                }
+                this.reviewsCache[posterKey].push(reviewData);
+                
+                // Also store under poster_id if different from poster name
+                if (reviewData.poster_id && reviewData.poster_id !== reviewData.poster) {
+                    if (!this.reviewsCache[reviewData.poster_id]) {
+                        this.reviewsCache[reviewData.poster_id] = [];
+                    }
+                    this.reviewsCache[reviewData.poster_id].push(reviewData);
+                }
+                
+                // Recalculate ratings after adding new review
+                this.calculatePosterRatings();
+                this.updatePosterCards();
+                
+                // Display reviews in the modal
+                this.displayReviewsForPoster(reviewData.poster);
+            }initializeZeroRatings() {
+                // Initialize all poster cards with zero ratings if no reviews exist
+                const posterIds = ['captain-ibrahim-traore', 'aloevera', 'shadows', 'eyes-on-the-prize', 'black-panther', 'parasite', 'dune', 'spider-man-no-way-home'];
+                posterIds.forEach(posterId => {
+                    this.updatePosterCardRatingById(posterId, 0, 0);
+                });
+            }calculatePosterRatings() {
+                // Calculate average ratings for each poster
+                Object.keys(this.reviewsCache).forEach(posterName => {
+                    const reviews = this.reviewsCache[posterName];
+                    if (reviews && reviews.length > 0) {
+                        const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+                        const averageRating = totalRating / reviews.length;
+                        this.posterRatings[posterName] = {
+                            average: averageRating,
+                            count: reviews.length
+                        };
+                    }
+                });
+            }            updatePosterCards() {
+                // Map poster names to their corresponding poster IDs
+                const posterNameToId = {
+                    'Captain Ibrahim Traore': 'captain-ibrahim-traore',
+                    'Aloevera': 'aloevera',
+                    'Shadows': 'shadows',
+                    'Eyes on the prize': 'eyes-on-the-prize',
+                    'Black Panther': 'black-panther',
+                    'Parasite': 'parasite',
+                    'Dune': 'dune',
+                    'Spider-Man: No Way Home': 'spider-man-no-way-home'
+                };
+                
+                // Update each poster card with calculated ratings
+                Object.keys(posterNameToId).forEach(posterName => {
+                    const posterId = posterNameToId[posterName];
+                    const rating = this.posterRatings[posterName] || this.posterRatings[posterId];
+                    
+                    if (rating) {
+                        this.updatePosterCardRatingById(posterId, rating.average, rating.count);
+                    } else {
+                        // Set zero rating if no reviews
+                        this.updatePosterCardRatingById(posterId, 0, 0);
+                    }
+                });
+            }
+
+            updatePosterCardRatingById(posterId, averageRating, reviewCount) {
+                // Find the poster card by poster ID
+                const posterCard = document.querySelector(`[data-poster-id="${posterId}"]`);
+                
+                if (posterCard) {
+                    const ratingContainer = posterCard.querySelector('.rating-display');
+                    if (ratingContainer) {
+                        // Update stars display
+                        const fullStars = Math.floor(averageRating);
+                        const hasHalfStar = (averageRating % 1) >= 0.5;
+                        const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+                        
+                        let starsHTML = '';
+                        // Full stars
+                        for (let i = 0; i < fullStars; i++) {
+                            starsHTML += '<i class="fas fa-star"></i>';
+                        }
+                        // Half star
+                        if (hasHalfStar) {
+                            starsHTML += '<i class="fas fa-star-half-alt"></i>';
+                        }
+                        // Empty stars
+                        for (let i = 0; i < emptyStars; i++) {
+                            starsHTML += '<i class="far fa-star"></i>';
+                        }
+                        
+                        // Update the rating display
+                        ratingContainer.innerHTML = `
+                            ${starsHTML}
+                            <span class="ml-2 text-white rating-text">${averageRating.toFixed(1)} / 5 (${reviewCount} ${reviewCount === 1 ? 'review' : 'reviews'})</span>
+                        `;
+                    }
+                }
+            }
+
+            updatePosterCardRating(posterName, averageRating, reviewCount) {
+                // Find the poster card by poster name
+                const posterCards = document.querySelectorAll('.bg-white .group');
+                
+                posterCards.forEach(card => {
+                    const titleElement = card.querySelector('h3');
+                    if (titleElement && titleElement.textContent.trim() === posterName) {
+                        const ratingContainer = card.querySelector('.flex.items-center.text-yellow-400');
+                        if (ratingContainer) {
+                            // Clear existing stars
+                            const starsContainer = ratingContainer.querySelector('.fas, .far')?.parentElement;
+                            if (starsContainer) {
+                                // Update stars display
+                                const fullStars = Math.floor(averageRating);
+                                const hasHalfStar = (averageRating % 1) >= 0.5;
+                                const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+                                
+                                let starsHTML = '';
+                                // Full stars
+                                for (let i = 0; i < fullStars; i++) {
+                                    starsHTML += '<i class="fas fa-star"></i>';
+                                }
+                                // Half star
+                                if (hasHalfStar) {
+                                    starsHTML += '<i class="fas fa-star-half-alt"></i>';
+                                }
+                                // Empty stars
+                                for (let i = 0; i < emptyStars; i++) {
+                                    starsHTML += '<i class="far fa-star"></i>';
+                                }
+                                
+                                // Update the rating display
+                                ratingContainer.innerHTML = `
+                                    ${starsHTML}
+                                    <span class="ml-2 text-white">${averageRating.toFixed(1)} / 5 (${reviewCount} ${reviewCount === 1 ? 'review' : 'reviews'})</span>
+                                `;
+                            }
+                        }
+                    }
+                });
+            }            createReviewElement(review) {
+                const reviewElement = document.createElement('div');
+                reviewElement.className = 'review-item bg-gray-50 p-4 rounded-lg mb-4';
+                
+                const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+                const date = review.timestamp ? new Date(review.timestamp).toLocaleDateString() : '';
+                
+                reviewElement.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="font-medium text-gray-800">${this.escapeHtml(review.name)}</span>
+                        <span class="text-yellow-500 text-lg">${stars}</span>
+                    </div>
+                    <p class="text-gray-700 mb-2 leading-relaxed">${this.escapeHtml(review.review)}</p>
+                    ${date ? `<span class="text-xs text-gray-500">${date}</span>` : ''}
+                `;
+                
+                return reviewElement;
+            }getPosterModalId(posterName) {
+                // Map poster names to modal IDs
+                const posterMapping = {
+                    'Captain Ibrahim Traore': 'review-poster-1',
+                    'Aloevera': 'review-poster-2',
+                    'Shadows': 'review-poster-3',
+                    'Eyes on the prize': 'review-poster-4',
+                    'Black Panther': 'review-poster-5',
+                    'Parasite': 'review-poster-6',
+                    'Dune': 'review-poster-7',
+                    'Spider-Man: No Way Home': 'review-poster-8'
+                };
+                return posterMapping[posterName] || '';
+            }
+
+            showMessage(form, message, type) {
+                // Remove any existing messages
+                const existingMessages = form.parentNode.querySelectorAll('.success-message, .error-message');
+                existingMessages.forEach(msg => msg.remove());
+                
+                // Create new message
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `${type}-message`;
+                messageDiv.textContent = message;
+                messageDiv.style.display = 'block';
+                
+                form.parentNode.appendChild(messageDiv);
+                
+                // Auto-hide after 5 seconds
+                setTimeout(() => {
+                    messageDiv.remove();
+                }, 5000);
+            }
+
+            escapeHtml(unsafe) {
+                return unsafe
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
+        }        // Initialize the review system when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            const reviewSystem = new ReviewSystem();
+            
+            // Add click listeners to poster cards to show reviews when modal opens
+            document.querySelectorAll('[data-poster-id]').forEach(posterCard => {
+                const posterLink = posterCard.querySelector('a[href^="#review-poster"]');
+                if (posterLink) {
+                    posterLink.addEventListener('click', () => {
+                        const posterName = posterCard.getAttribute('data-poster-name');
+                        // Small delay to ensure modal is opened before displaying reviews
+                        setTimeout(() => {
+                            reviewSystem.displayReviewsForPoster(posterName);
+                        }, 100);
+                    });
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
