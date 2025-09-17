@@ -12,11 +12,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Font Awesome for Stars -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body {
+    <style>        body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
-            color: #1f2937;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
         /* ----- Hero Slideshow CSS Hack ----- */
@@ -25,6 +26,8 @@
             position: relative;
             max-width: 100vw;
             height: 60vh;
+            border-radius: 0 0 30px 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
         }
 
         .slideshow-wrapper {
@@ -44,13 +47,71 @@
             position: relative;
         }
 
+        .slideshow-slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0,0,0,0.3), transparent, rgba(0,0,0,0.3));
+            z-index: 1;
+        }
+
+        .slideshow-slide > div {
+            position: relative;
+            z-index: 2;
+        }
+
         /* Hide radio buttons */
         .slideshow-controls input {
             display: none;
         }
 
-        
-        
+        /* Dot navigation styling */
+        .slide-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .slide-dots label {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .slide-dots label:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: scale(1.2);
+        }
+
+        #slide1:checked ~ .slideshow-wrapper {
+            transform: translateX(0%);
+        }
+
+        #slide2:checked ~ .slideshow-wrapper {
+            transform: translateX(-100%);
+        }
+
+        #slide3:checked ~ .slideshow-wrapper {
+            transform: translateX(-200%);
+        }
+
+        #slide1:checked ~ .slide-dots label:nth-child(1),
+        #slide2:checked ~ .slide-dots label:nth-child(2),
+        #slide3:checked ~ .slide-dots label:nth-child(3) {
+            background: #ec4899;
+            transform: scale(1.3);
+        }
+
         /* ----- Review Modal CSS Hack ----- */
         .modal-overlay {
             position: fixed;
@@ -92,6 +153,25 @@
             text-decoration: none;
         }
 
+        /* Enhanced modal close button */
+        .modal-close {
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-close:hover {
+            color: #ec4899;
+            background: rgba(236, 72, 153, 0.1);
+            transform: scale(1.1);
+        }
+
         /* ----- Star Rating CSS Hack ----- */
         .star-rating {
             display: flex;
@@ -120,6 +200,8 @@
         }        /* Review Display Styles */
         .review-item {
             margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
         }
 
         .review-item:last-child {
@@ -158,9 +240,221 @@
             display: none;
         }
         
+        /* Floating particle background effect */
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(236, 72, 153, 0.3);
+            border-radius: 50%;
+            animation: float 6s infinite linear;
+            box-shadow: 0 0 4px rgba(236, 72, 153, 0.3);
+        }
+
+        .particle:nth-child(odd) {
+            background: rgba(139, 92, 246, 0.3);
+            box-shadow: 0 0 4px rgba(139, 92, 246, 0.3);
+        }
+
+        .particle:nth-child(3n) {
+            background: rgba(6, 182, 212, 0.3);
+            box-shadow: 0 0 4px rgba(6, 182, 212, 0.3);
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Simple fade in animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Enhanced card hover effects - keeping existing shape */
+        .bg-white {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .bg-white:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(236, 72, 153, 0.2);
+            background: rgba(255, 255, 255, 0.98) !important;
+            border-color: rgba(236, 72, 153, 0.3);
+        }
+
+        /* Enhanced header */
+        .bg-gray-800 {
+            background: linear-gradient(135deg, rgba(31, 41, 55, 0.95), rgba(55, 65, 81, 0.95)) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Enhanced modal overlay */
+        .modal-overlay {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(31, 41, 55, 0.9));
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.95));
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Additional subtle animations */
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Subtle text animation on hover */
+        h1, h2, h3 {
+            transition: all 0.3s ease;
+        }
+
+        h1:hover, h2:hover, h3:hover {
+            transform: translateY(-2px);
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Enhanced image hover effects */
+        img {
+            transition: all 0.3s ease;
+        }
+
+        img:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+
+        /* Glassmorphism effect for sections */
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+        }
+
+        /* Enhanced star rating with glow effect */
+        .star-rating label:hover {
+            transform: scale(1.2) rotate(15deg);
+            filter: drop-shadow(0 4px 8px rgba(250, 204, 21, 0.4));
+        }
+
+        /* Smooth scroll animation */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Loading state enhancement */
+        .loading {
+            border-top-color: #ec4899;
+        }
+
+        /* Animate elements on scroll */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Button enhancements */
+        .bg-pink-400 {
+            background: linear-gradient(135deg, #ec4899, #f472b6) !important;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bg-pink-400::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .bg-pink-400:hover::before {
+            left: 100%;
+        }
+
+        .bg-pink-400:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4);
+        }
     </style>
 </head>
 <body>
+
+    <!-- Floating Particles Background -->
+    <div class="floating-particles" id="particles"></div>
 
     <!-- Header -->
     <header class="bg-gray-800 text-white shadow-lg sticky top-0 z-40">
@@ -218,18 +512,15 @@
 
     <!-- Main Content Area -->
     <main class="container mx-auto px-4 py-12">
-        
-        <!-- About Section -->
+          <!-- About Section -->
         <section id="about" class="mb-16">
-            <h2 class="text-4xl font-extrabold text-center text-gray-800 mb-6">About Our Mission</h2>
-            <div class="max-w-3xl mx-auto text-center text-lg text-gray-600 leading-relaxed">
+            <h2 class="text-4xl font-extrabold text-center text-white mb-6">About Our Mission</h2>
+            <div class="max-w-3xl mx-auto text-center text-lg text-gray-200 leading-relaxed bg-black bg-opacity-30 backdrop-blur-md rounded-3xl p-8 border border-white border-opacity-20">
                 <p>Welcome to PostRate, your ultimate destination for celebrating rich artistry of Ghanaian film posters. We believe that a film's poster is more than just an advertisement—it's a work of art in itself. Our platform provides a space for film enthusiasts and fans to explore, review, and rate these cinematic creations. By focusing on the visual design and communication. Join our community and help us build the definitive hub for Ghanaian film posters.</p>
             </div>
-        </section>
-
-        <!-- Film Posters Grid -->
+        </section>        <!-- Film Posters Grid -->
         <section id="films">
-            <h2 class="text-4xl font-extrabold text-center text-gray-800 mb-10">Featured Posters</h2>            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            <h2 class="text-4xl font-extrabold text-center text-white mb-10">Featured Posters</h2><div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                   <!-- Poster Card 1 -->
                 <div id="poster-card-1" class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-2" data-poster-id="captain-ibrahim-traore" data-poster-name="Captain Ibrahim Traore">
                     <a href="#review-poster-1" class="block relative group">
@@ -343,15 +634,14 @@
                 </div>
             </div>
         </section>
-        
-        <!-- About Section 2 -->
+          <!-- About Section 2 -->
         <section class="mt-16">
-            <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">Our Creative Vision</h2>
-            <div class="flex flex-col lg:flex-row items-center gap-10">
+            <h2 class="text-3xl font-bold text-center text-white mb-6">Our Creative Vision</h2>
+            <div class="flex flex-col lg:flex-row items-center gap-10 bg-black bg-opacity-30 backdrop-blur-md rounded-3xl p-8 border border-white border-opacity-20">
                 <div class="lg:w-1/2">
                     <img src="Lounge.jpeg" alt="Lounge" width="600" class="rounded-xl shadow-xl">
                 </div>
-                <div class="lg:w-1/2 text-lg text-gray-600 leading-relaxed">
+                <div class="lg:w-1/2 text-lg text-gray-200 leading-relaxed">
                     <p class="mb-4">Film posters are a powerful art form that encapsulates the essence of a movie in a single frame. In Ghana, this art has a rich history, with hand-painted posters being a celebrated tradition.  Our goal is to honor this legacy while also showcasing the evolution of modern poster design. We invite you to be a part of this journey by sharing your perspective on each poster's visual impact, creativity, and connection to the film it represents.</p>
                     <p>Each review you submit helps build a comprehensive archive of public opinion, providing valuable insights for creators and fellow fans alike. Let's celebrate the beauty and innovation of Ghanaian film together.</p>
                 </div>
@@ -365,7 +655,7 @@
     <div id="review-poster-1" class="modal-overlay">
         <div class="modal-content text-center w-full max-w-2xl mx-4">
             <a href="#films" class="modal-close">&times;</a>
-            <h3 class="text-2xl font-bold mb-4">Review: Captain Ibrahim Traore</h3>
+            <h3 class="text-2xl text-gray-600 font-bold mb-6">Review: Captain Ibrahim Traore</h3>
             <div class="flex flex-col items-center gap-6">
                 <img src="ibrahim.jpg" alt="ibrahim'" class="rounded-lg w-full max-w-sm">
                 <div class="w-full">                    <p class="mb-4 text-gray-600">Share your thoughts and rating for the poster of 'Captain Ibrahim Traore'.</p>
@@ -381,11 +671,11 @@
                         <input type="hidden" name="poster_id" value="captain-ibrahim-traore">
                         <div>
                             <label for="name1" class="sr-only">Your Name</label>
-                            <input type="text" id="name1" name="name" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
+                            <input type="text" id="name1" name="name" placeholder="Your Name" class="w-full p-3 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
                         </div>
                         <div>
                             <label for="review1" class="sr-only">Your Review</label>
-                            <textarea id="review1" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
+                            <textarea id="review1" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
                         </div>
                         <button type="submit" class="w-full bg-pink-400 text-white font-bold py-3 rounded-full hover:bg-pink-500 transition-colors">Submit Review</button>
                     </form>
@@ -396,7 +686,7 @@
     <div id="review-poster-2" class="modal-overlay">
         <div class="modal-content text-center w-full max-w-2xl mx-4">
             <a href="#films" class="modal-close">&times;</a>
-            <h3 class="text-2xl font-bold mb-4">Review: Aloevera</h3>
+            <h3 class="text-2xl text-gray-600 font-bold mb-6">Review: Aloevera</h3>
             <div class="flex flex-col items-center gap-6">
                 <img src="aloevera.jpg" alt="aloevera'" class="rounded-lg w-full max-w-sm">
                 <div class="w-full">                    <p class="mb-4 text-gray-600">Share your thoughts and rating for the poster of 'Aloevera'.</p>
@@ -412,11 +702,11 @@
                         <input type="hidden" name="poster_id" value="aloevera">
                         <div>
                             <label for="name2" class="sr-only">Your Name</label>
-                            <input type="text" id="name2" name="name" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
+                            <input type="text" id="name2" name="name" placeholder="Your Name" class="w-full p-3 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
                         </div>
                         <div>
                             <label for="review2" class="sr-only">Your Review</label>
-                            <textarea id="review2" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
+                            <textarea id="review2" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
                         </div>
                         <button type="submit" class="w-full bg-pink-400 text-white font-bold py-3 rounded-full hover:bg-pink-500 transition-colors">Submit Review</button>
                     </form>
@@ -428,7 +718,7 @@
     <div id="review-poster-3" class="modal-overlay">
         <div class="modal-content text-center w-full max-w-2xl mx-4">
             <a href="#films" class="modal-close">&times;</a>
-            <h3 class="text-2xl font-bold mb-4">Review: Shadows</h3>
+            <h3 class="text-2xl text-gray-600 font-bold mb-6">Review: Shadows</h3>
             <div class="flex flex-col items-center gap-6">
                 <img src="Shadows.jpg" alt="Shadows'" class="rounded-lg w-full max-w-sm">
                 <div class="w-full">                    <p class="mb-4 text-gray-600">Share your thoughts and rating for the poster of 'Shadows'.</p>
@@ -444,11 +734,11 @@
                         <input type="hidden" name="poster_id" value="shadows">
                         <div>
                             <label for="name3" class="sr-only">Your Name</label>
-                            <input type="text" id="name3" name="name" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
+                            <input type="text" id="name3" name="name" placeholder="Your Name" class="w-full p-3 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
                         </div>
                         <div>
                             <label for="review3" class="sr-only">Your Review</label>
-                            <textarea id="review3" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
+                            <textarea id="review3" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
                         </div>
                         <button type="submit" class="w-full bg-pink-400 text-white font-bold py-3 rounded-full hover:bg-pink-500 transition-colors">Submit Review</button>
                     </form>
@@ -460,7 +750,7 @@
     <div id="review-poster-4" class="modal-overlay">
         <div class="modal-content text-center w-full max-w-2xl mx-4">
             <a href="#films" class="modal-close">&times;</a>
-            <h3 class="text-2xl font-bold mb-4">Review: Eyes on the prize</h3>
+            <h3 class="text-2xl text-gray-600 font-bold mb-6">Review: Eyes on the prize</h3>
             <div class="flex flex-col items-center gap-6">
                 <img src="Eyes on the prize.jpg" alt="Eyes on the prize'" class="rounded-lg w-full max-w-sm">
                 <div class="w-full">                    <p class="mb-4 text-gray-600">Share your thoughts and rating for the poster of 'Eyes on the prize'.</p>
@@ -476,11 +766,11 @@
                         <input type="hidden" name="poster_id" value="eyes-on-the-prize">
                         <div>
                             <label for="name4" class="sr-only">Your Name</label>
-                            <input type="text" id="name4" name="name" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
+                            <input type="text" id="name4" name="name" placeholder="Your Name" class="w-full p-3 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
                         </div>
                         <div>
                             <label for="review4" class="sr-only">Your Review</label>
-                            <textarea id="review4" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
+                            <textarea id="review4" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
                         </div>
                         <button type="submit" class="w-full bg-pink-400 text-white font-bold py-3 rounded-full hover:bg-pink-500 transition-colors">Submit Review</button>
                     </form>
@@ -492,7 +782,7 @@
     <div id="review-poster-5" class="modal-overlay">
         <div class="modal-content text-center w-full max-w-2xl mx-4">
             <a href="#films" class="modal-close">&times;</a>
-            <h3 class="text-2xl font-bold mb-4">Review: Black Panther</h3>
+            <h3 class="text-2xl text-gray-600 font-bold mb-6">Review: Black Panther</h3>
             <div class="flex flex-col items-center gap-6">
                 <img src="https://image.tmdb.org/t/p/w500/uxzzxijgPIY7slzFvMotPv8wjKA.jpg" alt="Black Panther" class="rounded-lg w-full max-w-sm">
                 <div class="w-full">                    <p class="mb-4 text-gray-600">Share your thoughts and rating for the poster of 'Black Panther'.</p>
@@ -508,11 +798,11 @@
                         <input type="hidden" name="poster_id" value="black-panther">
                         <div>
                             <label for="name5" class="sr-only">Your Name</label>
-                            <input type="text" id="name5" name="name" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
+                            <input type="text" id="name5" name="name" placeholder="Your Name" class="w-full p-3 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
                         </div>
                         <div>
                             <label for="review5" class="sr-only">Your Review</label>
-                            <textarea id="review5" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
+                            <textarea id="review5" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
                         </div>
                         <button type="submit" class="w-full bg-pink-400 text-white font-bold py-3 rounded-full hover:bg-pink-500 transition-colors">Submit Review</button>
                     </form>
@@ -525,7 +815,7 @@
     <div id="review-poster-6" class="modal-overlay">
         <div class="modal-content text-center w-full max-w-2xl mx-4">
             <a href="#films" class="modal-close">&times;</a>
-            <h3 class="text-2xl font-bold mb-4">Review: Parasite</h3>
+            <h3 class="text-2xl text-gray-600 font-bold mb-6">Review: Parasite</h3>
             <div class="flex flex-col items-center gap-6">
                 <img src="https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg" alt="Parasite" class="rounded-lg w-full max-w-sm">
                 <div class="w-full">                    <p class="mb-4 text-gray-600">Share your thoughts and rating for the poster of 'Parasite'.</p>
@@ -541,11 +831,11 @@
                         <input type="hidden" name="poster_id" value="parasite">
                         <div>
                             <label for="name6" class="sr-only">Your Name</label>
-                            <input type="text" id="name6" name="name" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
+                            <input type="text" id="name6" name="name" placeholder="Your Name" class="w-full p-3 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
                         </div>
                         <div>
                             <label for="review6" class="sr-only">Your Review</label>
-                            <textarea id="review6" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
+                            <textarea id="review6" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
                         </div>
                         <button type="submit" class="w-full bg-pink-400 text-white font-bold py-3 rounded-full hover:bg-pink-500 transition-colors">Submit Review</button>
                     </form>
@@ -558,7 +848,7 @@
     <div id="review-poster-7" class="modal-overlay">
         <div class="modal-content text-center w-full max-w-2xl mx-4">
             <a href="#films" class="modal-close">&times;</a>
-            <h3 class="text-2xl font-bold mb-4">Review: Dune</h3>
+            <h3 class="text-2xl text-gray-600 font-bold mb-6">Review: Dune</h3>
             <div class="flex flex-col items-center gap-6">
                 <img src="https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg" alt="Dune" class="rounded-lg w-full max-w-sm">
                 <div class="w-full">                    <p class="mb-4 text-gray-600">Share your thoughts and rating for the poster of 'Dune'.</p>
@@ -574,11 +864,11 @@
                         <input type="hidden" name="poster_id" value="dune">
                         <div>
                             <label for="name7" class="sr-only">Your Name</label>
-                            <input type="text" id="name7" name="name" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
+                            <input type="text" id="name7" name="name" placeholder="Your Name" class="w-full p-3 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
                         </div>
                         <div>
                             <label for="review7" class="sr-only">Your Review</label>
-                            <textarea id="review7" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
+                            <textarea id="review7" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
                         </div>
                         <button type="submit" class="w-full bg-pink-400 text-white font-bold py-3 rounded-full hover:bg-pink-500 transition-colors">Submit Review</button>
                     </form>
@@ -591,7 +881,7 @@
     <div id="review-poster-8" class="modal-overlay">
         <div class="modal-content text-center w-full max-w-2xl mx-4">
             <a href="#films" class="modal-close">&times;</a>
-            <h3 class="text-2xl font-bold mb-4">Review: Spider-Man: No Way Home</h3>
+            <h3 class="text-2xl text-gray-600 font-bold mb-6">Review: Spider-Man: No Way Home</h3>
             <div class="flex flex-col items-center gap-6">
                 <img src="https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg" alt="Spider-Man: No Way Home" class="rounded-lg w-full max-w-sm">
                 <div class="w-full">                    <p class="mb-4 text-gray-600">Share your thoughts and rating for the poster of 'Spider-Man: No Way Home'.</p>
@@ -607,26 +897,82 @@
                         <input type="hidden" name="poster_id" value="spider-man-no-way-home">
                         <div>
                             <label for="name8" class="sr-only">Your Name</label>
-                            <input type="text" id="name8" name="name" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
+                            <input type="text" id="name8" name="name" placeholder="Your Name" class="w-full p-3 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400">
                         </div>
                         <div>
                             <label for="review8" class="sr-only">Your Review</label>
-                            <textarea id="review8" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
+                            <textarea id="review8" name="review" rows="4" placeholder="Write your review here..." class="w-full p-3 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
                         </div>
                         <button type="submit" class="w-full bg-pink-400 text-white font-bold py-3 rounded-full hover:bg-pink-500 transition-colors">Submit Review</button>
                     </form>
                 </div>
             </div>
         </div>
-    </div>
-      <!-- Footer -->
+    </div>      <!-- Footer -->
     <footer class="bg-gray-800 text-white py-8 mt-12">
         <div class="container mx-auto px-4 text-center">
-            <p>&copy; 2025 PostRate. All rights reserved.</p>
+            <div class="flex flex-col items-center gap-4">
+                <h3 class="text-2xl font-bold">🎬 PostRate</h3>
+                <p class="text-gray-300 max-w-md">Celebrating the art of cinema through poster reviews and community ratings.</p>
+                <div class="flex gap-6 text-sm text-gray-400">
+                    <span>Made with ❤️ for Film Lovers</span>
+                    <span>•</span>
+                    <span>&copy; 2025 PostRate. All rights reserved.</span>
+                </div>
+            </div>
         </div>
-    </footer>
+    </footer><script>
+        // Enhanced Floating Particles Animation
+        function createFloatingParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const numberOfParticles = 50; // Balanced number for performance
 
-    <script>
+            for (let i = 0; i < numberOfParticles; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random positioning
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                
+                // Random size variation for depth
+                const size = Math.random() * 1.5 + 1;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                
+                // Random opacity for variation
+                particle.style.opacity = Math.random() * 0.4 + 0.2;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Initialize particles and scroll animations when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            createFloatingParticles();
+            
+            // Add scroll-based animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe elements for scroll animations
+            document.querySelectorAll('section, .bg-white').forEach(el => {
+                el.classList.add('animate-on-scroll');
+                observer.observe(el);
+            });
+        });
+
         // Google Sheets Integration Configuration
         const GOOGLE_SHEETS_CONFIG = {
             // Replace with your Google Apps Script Web App URL
@@ -658,15 +1004,43 @@
                 
                 // Show loading state
                 submitButton.innerHTML = '<span class="loading"></span> Submitting...';
-                submitButton.disabled = true;
+                submitButton.disabled = true;                try {
+                    // Form validation
+                    const rating = formData.get('rating');
+                    const name = formData.get('name');
+                    const review = formData.get('review');
+                    
+                    // Validate star rating
+                    if (!rating || rating === '0') {
+                        this.showMessage(form, 'Please select a star rating before submitting your review.', 'error');
+                        submitButton.textContent = originalButtonText;
+                        submitButton.disabled = false;
+                        return;
+                    }
+                    
+                    // Validate name field
+                    if (!name || name.trim() === '') {
+                        this.showMessage(form, 'Please enter your name before submitting your review.', 'error');
+                        submitButton.textContent = originalButtonText;
+                        submitButton.disabled = false;
+                        return;
+                    }
+                    
+                    // Validate review text
+                    if (!review || review.trim() === '') {
+                        this.showMessage(form, 'Please write a review before submitting.', 'error');
+                        submitButton.textContent = originalButtonText;
+                        submitButton.disabled = false;
+                        return;
+                    }
 
-                try {                    // Prepare data for Google Sheets
+                    // Prepare data for Google Sheets
                     const reviewData = {
                         poster: formData.get('poster'),
                         poster_id: formData.get('poster_id'),
-                        name: formData.get('name') || 'Anonymous',
-                        rating: parseInt(formData.get('rating')) || 0,
-                        review: formData.get('review'),
+                        name: name.trim(),
+                        rating: parseInt(rating),
+                        review: review.trim(),
                         timestamp: new Date().toISOString()
                     };
 
@@ -1023,11 +1397,9 @@
                     'Spider-Man: No Way Home': 'review-poster-8'
                 };
                 return posterMapping[posterName] || '';
-            }
-
-            showMessage(form, message, type) {
+            }            showMessage(form, message, type) {
                 // Remove any existing messages
-                const existingMessages = form.parentNode.querySelectorAll('.success-message, .error-message');
+                const existingMessages = form.querySelectorAll('.success-message, .error-message');
                 existingMessages.forEach(msg => msg.remove());
                 
                 // Create new message
@@ -1036,7 +1408,14 @@
                 messageDiv.textContent = message;
                 messageDiv.style.display = 'block';
                 
-                form.parentNode.appendChild(messageDiv);
+                // Find the submit button and insert message after it
+                const submitButton = form.querySelector('button[type="submit"]');
+                if (submitButton) {
+                    submitButton.parentNode.insertBefore(messageDiv, submitButton.nextSibling);
+                } else {
+                    // Fallback: append to form if no submit button found
+                    form.appendChild(messageDiv);
+                }
                 
                 // Auto-hide after 5 seconds
                 setTimeout(() => {
